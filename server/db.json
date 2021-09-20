@@ -1,0 +1,17 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Ashwini",
+      "designation": "software developer",
+      "salary": "20000",
+      "mobile": "7030309884",
+      "email": "a@gmail.com",
+      "gender": "female",
+      "marathi": "",
+      "english": true,
+      "hindi": "",
+      "qualification": "mcs"
+    }
+  ]
+}
