@@ -1,0 +1,373 @@
+YUI.add("aui-event-input",function(e,t){var n=e.Node.DOM_EVENTS;if(e.Features.test("event","input")){n.input=1;return}n.cut=1,n.dragend=1,n.paste=1;var r=e.Event.KeyMap,i="~~aui|input|event~~",s=["keydown","paste","drop","cut"],o={cut:1,drop:1,paste:1};e.Event.define("input",{on:function(t,n,r){var i=this;n._handler=t.on(s,e.bind(i._dispatchEvent,i,n,r))},delegate:function(t,n,r,o){var u=this;n._handles=[],n._handler=t.delegate("focus",function(t){var o=t.target,a=o.getData(i);a||(a=o.on(s,e.bind(u._dispatchEvent,u,n,r)),n._handles.push(a),o.setData(i,a))},o)},detach:function(e,t){t._handler.detach()},detachDelegate:function(t,n){e.Array.each(n._handles,function(t){var n=e.one(t.evt.el);n&&n.setData(i,null),t.detach()}),n._handler.detach()},_dispatchEvent:function(t,n,i){var s=this,u,a;u=i.target,(o[i.type]||u.get("ownerDocument").get("activeElement")===u)&&r.isModifyingKey(i.keyCode)&&(t._timer&&(t._timer.cancel(),t._timer=null),a=r.isKey(i.keyCode,"WIN_IME")?null:u.get("value"),t._timer=e.soon(e.bind("_fireEvent",s,t,n,i,a)))},_fireEvent:function(e,t,n,r){var i=n.target;e._timer=null,i.get("value")!==r&&t.fire(n)}})},"3.1.0-deprecated.78",{requires:["aui-event-base","event-delegate","event-synthetic","timers"]});
+
+YUI.add("aui-form-validator",function(e,t){var n=e.Lang,r=e.Object,i=n.isBoolean,s=n.isDate,o=r.isEmpty,u=n.isFunction,a=n.isNode,f=n.isObject,l=n.isString,c=n.trim,h=e.namespace("config.FormValidator"),p=e.DOM._getRegExp,d=e.getClassName,v=d("form","group"),m=d("has","error"),g=d("error","field"),y=d("has","success"),b=d("success","field"),w=d("help","block"),E=d("form-validator","stack"),S='<div role="alert"></div>',x='<div class="'+[E,w].join(" ")+'"></div>';Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector),e.mix(h,{STRINGS:{DEFAULT:"Please fix {field}.",acceptFiles:"Please enter a value with a valid extension ({0}) in {field}.",alpha:"Please enter only alpha characters in {field}.",alphanum:"Please enter only alphanumeric characters in {field}.",date:"Please enter a valid date in {field}.",digits:"Please enter only digits in {field}.",email:"Please enter a valid email address in {field}.",equalTo:"Please enter the same value again in {field}.",iri:"Please enter a valid IRI in {field}.",max:"Please enter a value less than or equal to {0} in {field}.",maxLength:"Please enter no more than {0} characters in {field}.",min:"Please enter a value greater than or equal to {0} in {field}.",minLength:"Please enter at least {0} characters in {field}.",number:"Please enter a valid number in {field}.",range:"Please enter a value between {0} and {1} in {field}.",rangeLength:"Please enter a value between {0} and {1} characters long in {field}.",required:"{field} is required.",url:"Please enter a valid URL in {field}."},REGEX:{alpha:/^[a-z_]+$/i,alphanum:/^\w+$/,digits:/^\d+$/,email:new RegExp("^((([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+(\\.([a-z]|\\d|[!#\\$%&'\\*\\+\\-\\/=\\?\\^_`{\\|}~]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])+)*)|((\\x22)((((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(([\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]|\\x21|[\\x23-\\x5b]|[\\x5d-\\x7e]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(\\\\([\\x01-\\x09\\x0b\\x0c\\x0d-\\x7f]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF]))))*(((\\x20|\\x09)*(\\x0d\\x0a))?(\\x20|\\x09)+)?(\\x22)))@((([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.)+(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.?$","i"),iri:new RegExp("^([a-z]([a-z]|\\d|\\+|-|\\.)*):(\\/\\/(((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:)*@)?((\\[(|(v[\\da-f]{1,}\\.(([a-z]|\\d|-|\\.|_|~)|[!\\$&'\\(\\)\\*\\+,;=]|:)+))\\])|((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]))|(([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=])*)(:\\d*)?)(\\/(([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)*)*|(\\/((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)+(\\/(([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)*)*)?)|((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)+(\\/(([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)*)*)|((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)){0})(\\?((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)|[\\uE000-\\uF8FF]|\\/|\\?)*)?(\\#((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)|\\/|\\?)*)?$","i"),number:/^[+\-]?(\d+([.,]\d+)?)+([eE][+-]?\d+)?$/,url:new RegExp("^(https?|ftp):\\/\\/(((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:)*@)?(((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]))|((([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|\\d|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.)*(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])*([a-z]|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])))\\.?)(:\\d*)?)(\\/((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)+(\\/(([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)*)*)?)?(\\?((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)|[\\uE000-\\uF8FF]|\\/|\\?)*)?(\\#((([a-z]|\\d|-|\\.|_|~|[\\u00A0-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF])|(%[\\da-f]{2})|[!\\$&'\\(\\)\\*\\+,;=]|:|@)|\\/|\\?)*)?$","i")},RULES:{acceptFiles:function(t,n,r){var i=null;if(l(r)){var s=r.replace(/\./g,"").split(/,\s*|\b\s*/);s=e.Array.map(s,e.Escape.regex),i=p("[.]("+s.join("|")+")$","i")}return i&&i.test(t)},date:function(e){var t=new Date(e);return s(t)&&t!=="Invalid Date"&&!isNaN(t)},equalTo:function(t,n,r){var i=e.one(r);return i&&c(i.val(
+))===t},hasValue:function(t,n){var r=this;if(e.FormValidator.isCheckable(n)){var i=n.get("name"),s=e.all(r.getFieldsByName(i));return s.filter(":checked").size()>0}return!!t},max:function(e,t,r){return n.toFloat(e)<=r},maxLength:function(e,t,n){return e.length<=n},min:function(e,t,r){return n.toFloat(e)>=r},minLength:function(e,t,n){return e.length>=n},range:function(e,t,r){var i=n.toFloat(e);return i>=r[0]&&i<=r[1]},rangeLength:function(e,t,n){var r=e.length;return r>=n[0]&&r<=n[1]},required:function(e,t,n){var r=this;return n===!0?h.RULES.hasValue.apply(r,[e,t]):!0}}});var T=e.Component.create({NAME:"form-validator",ATTRS:{boundingBox:{setter:e.one},containerErrorClass:{value:m,validator:l},containerValidClass:{value:y,validator:l},errorClass:{value:g,validator:l},extractRules:{value:!0,validator:i},fieldContainer:{value:"."+v},fieldStrings:{value:{},validator:f},labelCssClass:{validator:l,value:"control-label"},messageContainer:{getter:function(t){return e.Node.create(t).clone()},value:S},rules:{getter:function(e){var t=this;return t._rulesAlreadyExtracted||t._extractRulesFromMarkup(e),e},validator:f,value:{}},selectText:{value:!0,validator:i},showMessages:{value:!0,validator:i},showAllMessages:{value:!1,validator:i},skipValidationTargetSelector:{value:"a[class~=btn-cancel]"},stackErrorContainer:{getter:function(t){return e.Node.create(t).clone()},value:x},strings:{valueFn:function(){return h.STRINGS}},validateOnBlur:{value:!0,validator:i},validateOnInput:{value:!1,validator:i},validClass:{value:b,validator:l}},_setCustomRules:function(t){e.each(t,function(t,n){e.config.FormValidator.RULES[n]=t.condition,e.config.FormValidator.STRINGS[n]=t.errorMessage})},addCustomRules:function(e){var t=this;f(e)&&t._setCustomRules(e)},isCheckable:function(e){var t=e.get("type").toLowerCase();return t==="checkbox"||t==="radio"},EXTENDS:e.Base,prototype:{initializer:function(){var e=this;e.errors={},e._blurHandlers=null,e._fileBlurHandlers=null,e._fileInputHandlers=null,e._inputHandlers=null,e._rulesAlreadyExtracted=!1,e._stackErrorContainers={},e.bindUI(),e._uiSetValidateOnBlur(e.get("validateOnBlur")),e._uiSetValidateOnInput(e.get("validateOnInput"))},bindUI:function(){var t=this,n=t.get("boundingBox"),r=n.delegate("focus",function(){t._setARIARoles(),r.detach()},"input,select,textarea,button");t.publish({errorField:{defaultFn:t._defErrorFieldFn},validField:{defaultFn:t._defValidFieldFn},validateField:{defaultFn:t._defValidateFieldFn}}),n.on({reset:e.bind(t._onFormReset,t),submit:e.bind(t._onFormSubmit,t)}),t.after({extractRulesChange:t._afterExtractRulesChange,validateOnBlurChange:t._afterValidateOnBlurChange,validateOnInputChange:t._afterValidateOnInputChange})},addFieldError:function(e,t){var n=this,r=n.errors,i=e.get("name");r[i]||(r[i]=[]),r[i].push(t)},clearFieldError:function(e){var t=a(e)?e.get("name"):e;l(t)&&delete this.errors[t]},eachRule:function(t){var n=this;e.each(n.get("rules"),function(e,r){u(t)&&t.apply(n,[e,r])})},findFieldContainer:function(e){var t=this,n=t.get("fieldContainer"),r=e.ancestor();return n&&e.ancestor(n)&&(r=e.ancestor(n)),r},focusInvalidField:function(){var e=this,t=e.get("boundingBox"),n=t.one("."+g);n&&(n=e.findFieldContainer(n),e.get("selectText")&&n.selectText(),n.focus(),n.scrollIntoView(!1),window.scrollBy(0,n.getDOM().scrollHeight))},getField:function(t){var n=this;return l(t)&&(t=n.getFieldsByName(t),t&&t.length&&!t.name&&(t=t[0])),e.one(t)},getFieldsByName:function(e){var t=this,n=t.get("boundingBox").getDOM();return n.elements[e]},getFieldError:function(e){var t=this;return t.errors[e.get("name")]},getFieldStackErrorContainer:function(e){var t=this,n=a(e)?e.get("name"):e,r=t._stackErrorContainers;return r[n]||(r[n]=t.get("stackErrorContainer")),r[n]},getFieldErrorMessage:function(t,r){var i=this,s=t.get("name"),o=i.get("fieldStrings")[s]||{},u=i.get("rules")[s],a=i._findFieldLabel(t),f=i.get("strings"),l={};a&&(l.field=a);if(r in u){var c=e.Array(u[r]);e.each(c,function(e,t){l[t]=[e].join("")})}var h=o[r]||f[r]||f.DEFAULT;return n.sub(h,l)},hasErrors:function(){var e=this;return!o(e.errors)},highlight:function(t,n){var r=this,i,s,o;t&&(i=r.findFieldContainer(t),s=t.get("name"),this.validatable(t)?(o=e.all(r.getFieldsByName(s)),o.each(function(e){r._highlightHelper(e,r.get("errorClass"),r.get("validClass"),n)}),i&&r._highlightHelper(i,r.get("containerErrorClass"),r.get("containerValidClass"),n)):t.val()||r.resetField(s))},normalizeRuleValue:function(e,t){var n=this;return u(e)?e.apply(n,[t]):e},unhighlight:function(e){var t=this;t.highlight(e,!0)},printStackError:function(t,n,r){var i=this;i.get("showAllMessages")||(e.Array.indexOf(r,"required")!==-1?r=["required"]:r=r.slice(0,1)),n.empty(),e.Array.each(r,function(e){var r=i.getFieldErrorMessage(t,e),s=i.get("messageContainer").addClass(e);n.append(s.html(r))})},resetAllFields:function(){var e=this;e.eachRule(function(t,n){e.resetField(n)})},resetField:function(t){var n=this,r,i,s,o;r=a(t)?t.get("name"):t,r&&(i=n.get("rules")[r],i&&(n.clearFieldError(r),o=n.getFieldStackErrorContainer(r),o.remove(),s=e.all(n.getFieldsByName(r)),s.each(function(e){n.resetFieldCss(e),e.removeAttribute("aria-errormessage"),e.removeAttribute("aria-invalid")})))},resetFieldCss:function(t){var n=this,r=n.findFieldContainer(t),i=function(t,r){t&&e.each(r,function(e){t.removeClass(n.get(e))})};i(t,["validClass","errorClass"]),i(r,["containerValidClass","containerErrorClass"])},validatable:function(e){var t=this,n=!1,r=t.get("rules")[e.get("name")];return r&&(n=t.normalizeRuleValue(r.required,e)||h.RULES.hasValue.apply(t,[e.val(),e])),!!n},validate:function(){var e=this;e.eachRule(function(t,n){e.validateField(n)}),e.focusInvalidField()},validateField:function(e){var t,n;this.resetField(e),t=l(e)?this.getField(e):e,a(t)&&(n=this.validatable(t),n&&this.fire("validateField",{validator:{field:t}}))},_afterExtractRulesChange:function(e){var t=this;t._uiSetExtractRules(e.newVal)},_afterValidateOnBlurChange:function(e){var t=this;t._uiSetValidateOnBlur
+(e.newVal)},_afterValidateOnInputChange:function(e){var t=this;t._uiSetValidateOnInput(e.newVal)},_defErrorFieldFn:function(t){var n=this,r,i,s,o,u;i=n.get("labelCssClass"),u=t.validator,r=u.field,n.highlight(r);if(n.get("showMessages")){o=r,s=n.getFieldStackErrorContainer(r),e.FormValidator.isCheckable(o)&&(o=r.ancestor("."+m).get("lastChild"));var a=r.get("id")+"Helper";s.set("id",a),o.placeAfter(s),n.printStackError(r,s,u.errors)}},_defValidFieldFn:function(e){var t=this,n=e.validator.field;t.unhighlight(n)},_defValidateFieldFn:function(t){var n=this,r=t.validator.field,i=n.get("rules")[r.get("name")];e.each(i,function(e,t){var i=h.RULES[t],s=c(r.val());e=n.normalizeRuleValue(e,r),u(i)&&!i.apply(n,[s,r,e])&&n.addFieldError(r,t)});var s=n.getFieldError(r);s?n.fire("errorField",{validator:{field:r,errors:s}}):n.fire("validField",{validator:{field:r}})},_findFieldLabel:function(t){var n="."+this.get("labelCssClass"),r=e.one("label[for="+t.get("id")+"]")||t.ancestor().previous(n);r||(r=t.ancestor("."+m),r&&(r=r.one(n)));if(r)return r.get("text")},_highlightHelper:function(e,t,n,r){var i=this;r?(e.removeClass(t).addClass(n),n===b&&(e.removeAttribute("aria-errormessage"),e.removeAttribute("aria-invalid"))):(e.removeClass(n).addClass(t),t===g&&(e.set("aria-errormessage",e.get("id")+"Helper"),e.set("aria-invalid",!0)))},_extractRulesFromMarkup:function(e){var t=this,n=t.get("boundingBox").getDOM(),i=n.elements,s=r.keys(h.RULES),o=s.join("|"),u=p("field-("+o+")","g"),a,f,l=[],c=function(e,t){l.push(t)};for(a=0,f=i.length;a<f;a++){var d=i[a],v=d.name;d.className.replace(u,c);if(l.length){var m=e[v],g,y;m||(m={},e[v]=m);for(g=0,y=l.length;g<y;g++){var b=l[g];b in m||(m[b]=!0)}l.length=0}}t._rulesAlreadyExtracted=!0},_onFieldInput:function(e){var t=this,n=t.get("skipValidationTargetSelector");(!e.relatedTarget||!e.relatedTarget.getDOMNode().matches(n))&&setTimeout(function(){t.validateField(e.target)},300)},_onFormSubmit:function(e){var t=this,n={validator:{formEvent:e}};t.validate(),t.hasErrors()?(n.validator.errors=t.errors,t.fire("submitError",n),e.halt()):t.fire("submit",n)},_onFormReset:function(){var e=this;e.resetAllFields()},_setARIARoles:function(){var e=this;e.eachRule(function(t,n){var r=e.getField(n),i=e.normalizeRuleValue(t.required,r);i&&r&&!r.attr("aria-required")&&r.attr("aria-required",!0)})},_uiSetExtractRules:function(e){var t=this;e&&t._extractRulesFromMarkup(t.get("rules"))},_uiSetValidateOnInput:function(e){var t=this,n=t.get("boundingBox");e?(t._inputHandlers||(t._inputHandlers=n.delegate("input",t._onFieldInput,'input:not([type="file"]),select,textarea,button',t)),t._fileInputHandlers||(t._fileInputHandlers=n.delegate("change",t._onFieldInput,'input[type="file"]',t))):(t._inputHandlers&&t._inputHandlers.detach(),t._fileInputHandlers&&t._fileInputHandlers.detach())},_uiSetValidateOnBlur:function(e){var t=this,n=t.get("boundingBox");e?(t._blurHandlers||(t._blurHandlers=n.delegate("blur",t._onFieldInput,'input:not([type="file"]),select,textarea,button',t)),t._fileBlurHandlers||(t._fileBlurHandlers=n.delegate("change",t._onFieldInput,'input[type="file"]',t))):(t._blurHandlers&&t._blurHandlers.detach(),t._fileBlurHandlers&&t._fileBlurHandlers.detach())}}});e.each(h.REGEX,function(e,t){h.RULES[t]=function(e){return h.REGEX[t].test(e)}}),e.FormValidator=T},"3.1.0-deprecated.78",{requires:["escape","selector-css3","node-event-delegate","aui-node","aui-component","aui-event-input"]});
+
+/**
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+AUI.add('liferay-form', function (A) {
+  var AArray = A.Array;
+  var Lang = A.Lang;
+  var DEFAULTS_FORM_VALIDATOR = A.config.FormValidator;
+  var defaultAcceptFiles = DEFAULTS_FORM_VALIDATOR.RULES.acceptFiles;
+  var TABS_SECTION_STR = 'TabsSection';
+  var REGEX_EMAIL = /^[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:\w(?:[\w-]*\w)?\.)+(\w(?:[\w-]*\w))$/;
+  var REGEX_NUMBER = /^[+-]?(\d+)([.|,]\d+)*([eE][+-]?\d+)?$/;
+  var REGEX_URL = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(https?:\/\/|www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))((.*):(\d*)\/?(.*))?)/;
+
+  var acceptFiles = function acceptFiles(val, node, ruleValue) {
+    if (ruleValue && ruleValue.split(',').includes('*')) {
+      return true;
+    }
+
+    return defaultAcceptFiles(val, node, ruleValue);
+  };
+
+  var email = function email(val) {
+    return REGEX_EMAIL.test(val);
+  };
+
+  var maxFileSize = function maxFileSize(_val, node, ruleValue) {
+    var nodeType = node.get('type').toLowerCase();
+
+    if (nodeType === 'file') {
+      return ruleValue === 0 || node._node.files[0].size <= ruleValue;
+    }
+
+    return true;
+  };
+
+  var number = function number(val, _node, _ruleValue) {
+    return REGEX_NUMBER && REGEX_NUMBER.test(val);
+  };
+
+  var url = function url(val, _node, _ruleValue) {
+    return REGEX_URL && REGEX_URL.test(val);
+  };
+
+  A.mix(DEFAULTS_FORM_VALIDATOR.RULES, {
+    acceptFiles: acceptFiles,
+    email: email,
+    maxFileSize: maxFileSize,
+    number: number,
+    url: url
+  }, true);
+  A.mix(DEFAULTS_FORM_VALIDATOR.STRINGS, {
+    DEFAULT: 'Please\x20fix\x20this\x20field\x2e',
+    acceptFiles: 'Please\x20enter\x20a\x20file\x20with\x20a\x20valid\x20extension\x20\x28\x7b0\x7d\x29\x2e',
+    alpha: 'Please\x20enter\x20only\x20alpha\x20characters\x2e',
+    alphanum: 'Please\x20enter\x20only\x20alphanumeric\x20characters\x2e',
+    date: 'Please\x20enter\x20a\x20valid\x20date\x2e',
+    digits: 'Please\x20enter\x20only\x20digits\x2e',
+    email: 'Please\x20enter\x20a\x20valid\x20email\x20address\x2e',
+    equalTo: 'Please\x20enter\x20the\x20same\x20value\x20again\x2e',
+    max: 'Please\x20enter\x20a\x20value\x20less\x20than\x20or\x20equal\x20to\x20\x7b0\x7d\x2e',
+    maxFileSize: 'Please\x20enter\x20a\x20file\x20with\x20a\x20valid\x20file\x20size\x20no\x20larger\x20than\x20\x7b0\x7d\x2e',
+    maxLength: 'Please\x20enter\x20no\x20more\x20than\x20\x7b0\x7d\x20characters\x2e',
+    min: 'Please\x20enter\x20a\x20value\x20greater\x20than\x20or\x20equal\x20to\x20\x7b0\x7d\x2e',
+    minLength: 'Please\x20enter\x20at\x20least\x20\x7b0\x7d\x20characters\x2e',
+    number: 'Please\x20enter\x20a\x20valid\x20number\x2e',
+    range: 'Please\x20enter\x20a\x20value\x20between\x20\x7b0\x7d\x20and\x20\x7b1\x7d\x2e',
+    rangeLength: 'Please\x20enter\x20a\x20value\x20between\x20\x7b0\x7d\x20and\x20\x7b1\x7d\x20characters\x20long\x2e',
+    required: 'This\x20field\x20is\x20required\x2e',
+    url: 'Please\x20enter\x20a\x20valid\x20URL\x2e'
+  }, true);
+  var Form = A.Component.create({
+    _INSTANCES: {},
+    ATTRS: {
+      fieldRules: {
+        setter: function setter(val) {
+          var instance = this;
+
+          instance._processFieldRules(val);
+
+          return val;
+        }
+      },
+      id: {},
+      namespace: {},
+      onSubmit: {
+        valueFn: function valueFn() {
+          var instance = this;
+          return instance._onSubmit;
+        }
+      },
+      validateOnBlur: {
+        validator: Lang.isBoolean,
+        value: true
+      }
+    },
+    EXTENDS: A.Base,
+    get: function get(id) {
+      var instance = this;
+      return instance._INSTANCES[id];
+    },
+    prototype: {
+      _afterGetFieldsByName: function _afterGetFieldsByName(fieldName) {
+        var instance = this;
+        var editorString = 'Editor';
+
+        if (fieldName.lastIndexOf(editorString) === fieldName.length - editorString.length) {
+          var formNode = instance.formNode;
+          return new A.Do.AlterReturn('Return editor dom element', formNode.one('#' + fieldName));
+        }
+      },
+      _bindForm: function _bindForm() {
+        var instance = this;
+        var formNode = instance.formNode;
+        var formValidator = instance.formValidator;
+        formValidator.on('submit', A.bind('_onValidatorSubmit', instance));
+        formValidator.on('submitError', A.bind('_onSubmitError', instance));
+        formNode.delegate(['blur', 'focus'], A.bind('_onFieldFocusChange', instance), 'button,input,select,textarea');
+        formNode.delegate(['blur', 'input'], A.bind('_onEditorBlur', instance), 'div[contenteditable="true"]');
+        A.Do.after('_afterGetFieldsByName', formValidator, 'getFieldsByName', instance);
+      },
+      _defaultSubmitFn: function _defaultSubmitFn(event) {
+        var instance = this;
+
+        if (!event.stopped) {
+          submitForm(instance.form);
+        }
+      },
+      _findRuleIndex: function _findRuleIndex(fieldRules, fieldName, validatorName) {
+        var ruleIndex = -1;
+        AArray.some(fieldRules, function (element, index) {
+          if (element.fieldName === fieldName && element.validatorName === validatorName) {
+            ruleIndex = index;
+            return true;
+          }
+        });
+        return ruleIndex;
+      },
+      _focusInvalidFieldTab: function _focusInvalidFieldTab() {
+        var instance = this;
+        var formNode = instance.formNode;
+        var field = formNode.one('.' + instance.formValidator.get('errorClass'));
+
+        if (field) {
+          var fieldWrapper = field.ancestor('form > fieldset > div, form > div');
+          var formTabs = formNode.one('.lfr-nav');
+
+          if (fieldWrapper && formTabs) {
+            var tabs = formTabs.all('.nav-item');
+            var tabsNamespace = formTabs.getAttribute('data-tabs-namespace');
+            var tabNames = AArray.map(tabs._nodes, function (tab) {
+              return tab.getAttribute('data-tab-name');
+            });
+            var fieldWrapperId = fieldWrapper.getAttribute('id').slice(0, -TABS_SECTION_STR.length);
+            var fieldTabId = AArray.find(tabs._nodes, function (tab) {
+              return tab.getAttribute('id').indexOf(fieldWrapperId) !== -1;
+            });
+            Liferay.Portal.Tabs.show(tabsNamespace, tabNames, fieldTabId.getAttribute('data-tab-name'));
+          }
+        }
+      },
+      _onEditorBlur: function _onEditorBlur(event) {
+        var instance = this;
+        var formValidator = instance.formValidator;
+        formValidator.validateField(event.target);
+      },
+      _onFieldFocusChange: function _onFieldFocusChange(event) {
+        var row = event.currentTarget.ancestor('.field');
+
+        if (row) {
+          row.toggleClass('field-focused', event.type === 'focus');
+        }
+      },
+      _onSubmit: function _onSubmit(event) {
+        var instance = this;
+        event.preventDefault();
+        setTimeout(function () {
+          instance._defaultSubmitFn(event);
+        }, 0);
+      },
+      _onSubmitError: function _onSubmitError() {
+        var instance = this;
+        var collapsiblePanels = instance.formNode.all('.panel-collapse');
+        collapsiblePanels.each(function (panel) {
+          var errorFields = panel.get('children').all('.has-error');
+
+          if (errorFields.size() > 0 && !panel.hasClass('in')) {
+            var panelNode = panel.getDOM();
+            Liferay.CollapseProvider.show({
+              panel: panelNode
+            });
+          }
+        });
+      },
+      _onValidatorSubmit: function _onValidatorSubmit(event) {
+        var instance = this;
+        var onSubmit = instance.get('onSubmit');
+        onSubmit.call(instance, event.validator.formEvent);
+      },
+      _processFieldRule: function _processFieldRule(rules, strings, rule) {
+        var instance = this;
+        var value = true;
+        var fieldName = rule.fieldName;
+        var validatorName = rule.validatorName;
+        var field = this.formValidator.getField(fieldName);
+
+        if (field) {
+          var fieldNode = field.getDOMNode();
+          A.Do.after('_setFieldAttribute', fieldNode, 'setAttribute', instance, fieldName);
+          A.Do.after('_removeFieldAttribute', fieldNode, 'removeAttribute', instance, fieldName);
+        }
+
+        if ((rule.body || rule.body === 0) && !rule.custom) {
+          value = rule.body;
+        }
+
+        var fieldRules = rules[fieldName];
+
+        if (!fieldRules) {
+          fieldRules = {};
+          rules[fieldName] = fieldRules;
+        }
+
+        fieldRules[validatorName] = value;
+
+        if (rule.custom) {
+          DEFAULTS_FORM_VALIDATOR.RULES[validatorName] = rule.body;
+        }
+
+        var errorMessage = rule.errorMessage;
+
+        if (errorMessage) {
+          var fieldStrings = strings[fieldName];
+
+          if (!fieldStrings) {
+            fieldStrings = {};
+            strings[fieldName] = fieldStrings;
+          }
+
+          fieldStrings[validatorName] = errorMessage;
+        }
+      },
+      _processFieldRules: function _processFieldRules(fieldRules) {
+        var instance = this;
+
+        if (!fieldRules) {
+          fieldRules = instance.get('fieldRules');
+        }
+
+        var fieldStrings = {};
+        var rules = {};
+
+        for (var rule in fieldRules) {
+          instance._processFieldRule(rules, fieldStrings, fieldRules[rule]);
+        }
+
+        var formValidator = instance.formValidator;
+
+        if (formValidator) {
+          formValidator.set('fieldStrings', fieldStrings);
+          formValidator.set('rules', rules);
+        }
+      },
+      _removeFieldAttribute: function _removeFieldAttribute(name, fieldName) {
+        if (name === 'disabled') {
+          this.formValidator.validateField(fieldName);
+        }
+      },
+      _setFieldAttribute: function _setFieldAttribute(name, value, fieldName) {
+        if (name === 'disabled') {
+          this.formValidator.resetField(fieldName);
+        }
+      },
+      _validatable: function _validatable(field) {
+        var result;
+
+        if (field.test(':disabled')) {
+          result = new A.Do.Halt();
+        }
+
+        return result;
+      },
+      addRule: function addRule(fieldName, validatorName, errorMessage, body, custom) {
+        var instance = this;
+        var fieldRules = instance.get('fieldRules');
+
+        var ruleIndex = instance._findRuleIndex(fieldRules, fieldName, validatorName);
+
+        if (ruleIndex == -1) {
+          fieldRules.push({
+            body: body || '',
+            custom: custom || false,
+            errorMessage: errorMessage || '',
+            fieldName: fieldName,
+            validatorName: validatorName
+          });
+
+          instance._processFieldRules(fieldRules);
+        }
+      },
+      initializer: function initializer() {
+        var instance = this;
+        var id = instance.get('id');
+        var form = document[id];
+        var formNode = A.one(form);
+        instance.form = form;
+        instance.formNode = formNode;
+
+        if (formNode) {
+          var formValidator = new A.FormValidator({
+            boundingBox: formNode,
+            validateOnBlur: instance.get('validateOnBlur')
+          });
+          A.Do.before('_focusInvalidFieldTab', formValidator, 'focusInvalidField', instance);
+          A.Do.before('_validatable', formValidator, 'validatable', instance);
+          instance.formValidator = formValidator;
+
+          instance._processFieldRules();
+
+          instance._bindForm();
+        }
+      },
+      removeRule: function removeRule(fieldName, validatorName) {
+        var instance = this;
+        var fieldRules = instance.get('fieldRules');
+
+        var ruleIndex = instance._findRuleIndex(fieldRules, fieldName, validatorName);
+
+        if (ruleIndex != -1) {
+          var rule = fieldRules[ruleIndex];
+          instance.formValidator.resetField(rule.fieldName);
+          fieldRules.splice(ruleIndex, 1);
+
+          instance._processFieldRules(fieldRules);
+        }
+      }
+    },
+
+    /*
+     * @deprecated As of Mueller (7.2.x), with no direct replacement
+     */
+    register: function register(config) {
+      var instance = this;
+      var form = new Liferay.Form(config);
+      var formName = config.id || config.namespace;
+      instance._INSTANCES[formName] = form;
+      Liferay.fire('form:registered', {
+        form: form,
+        formName: formName
+      });
+      return form;
+    }
+  });
+  Liferay.Form = Form;
+}, '', {
+  requires: ['aui-base', 'aui-form-validator']
+});
+//# sourceMappingURL=form.js.map

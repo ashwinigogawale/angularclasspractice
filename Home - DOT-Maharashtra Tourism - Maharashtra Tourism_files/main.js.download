@@ -1,0 +1,62 @@
+/*1638683840000*/
+function bindSVGPathEvents(){
+	var svgPaths = document.querySelectorAll("#states > *");
+	svgPaths.forEach(function(el) {
+		el.addEventListener("click", function() {
+			var getDistrictDataURL = $("#districtDataURL").val();
+			var stateId = el.getAttribute("id");
+			$.ajax({
+				url: getDistrictDataURL,
+				method:"get",
+				data: {
+					'stateCode' : stateId,
+				}, 
+				success: function(data){
+					$('owl-carousel-location').trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
+					$('owl-carousel-location').find('.owl-stage-outer').children().unwrap();
+					$("#district-data-cnt").html(data);
+					$('.owl-carousel-location').owlCarousel({
+						loop:true,
+						margin:10,
+						nav:true,
+						navText: ["<i class=\'fa fa-arrow-left\' data-feather='\arrow-left\'></i>", "<i class=\'fa fa-arrow-right\' data-feather='\arrow-right\'></i>"],
+						dots:false, 
+						responsive:{
+						    0:{
+						        items:1
+						    },
+						    600:{
+						        items:2
+						    },
+						    1000:{
+						        items:2
+						    }
+						}
+					});
+					
+					generate(stateId);
+				}
+			});
+		});
+		
+		if(el.classList.contains('active-city')){
+			var e = document.createEvent('HTMLEvents');
+		    e.initEvent('click', false, true);
+		    el.dispatchEvent(e);
+		}
+	});
+}
+
+
+function generate(stateId) {
+  $("#hidden-path-id").removeClass();
+  $("#hidden-path-id").addClass("land " + stateId);
+  
+  var newColor1 = $("#hidden-path-id").css('fill');
+  var newColor2 = '#1a1e1f';
+  
+  // var gradient = 'linear-gradient("-180degdeg," + newColor1 + ", " + newColor2 + ")';
+  var gradient = "linear-gradient(" + 250 + "deg, " + newColor1 + ", " + newColor2 + ")";
+  
+  document.getElementById("gradient-container").style.background = gradient;
+}

@@ -1,0 +1,19 @@
+/*1626313444000*/
+function getDistance(){
+	
+	var getDistanceURL = $("#distanceURL").val();
+	var fromLocation = $("#fromLocation").val();
+	var toLocation = $("#toLocation").val();
+	
+	$.ajax({
+		url: getDistanceURL,
+		method:"get",
+		data: {
+			'fromLocation' : fromLocation,
+			'toLocation' : toLocation
+		}, 
+		success: function(data){
+			$("#message").html("Distance between "+fromLocation+" and "+toLocation+" is "+data);
+		}
+	});
+}

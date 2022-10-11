@@ -1,0 +1,11 @@
+#calendar .fc-header h2 {
+  font-size: 23px !important;
+  line-height: 30px !important;
+  margin-bottom: 0 !important; }
+
+#calendar .fc-header td {
+  white-space: nowrap;
+  padding: 10px 10px 0px; }
+
+#calendar table {
+  margin-bottom: 0; }
