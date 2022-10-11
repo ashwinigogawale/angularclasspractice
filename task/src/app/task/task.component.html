@@ -1,0 +1,110 @@
+
+<div class="registerbox">
+    <h1>Regitration Form</h1>
+
+<form [formGroup]="registerform" (ngSubmit)="register()">
+<div>
+ First Name:
+</div>
+<input type="text" formControlName="firstname" required minlength="2" required maxlength="15"
+[(ngModel)]="registerform.firstname">
+
+<div *ngIf="registerform?.controls['firstname'].touched ||registerform?.controls['firstname'].dirty">
+<div class="alert" *ngIf="registerform?.controls['firstname'].errors?.required">
+   First Name is required
+    </div>
+    <div class="alert" *ngIf="registerform?.controls['firstname'].errors?.minlength">
+        First Name must be at least 2 characters long.
+      </div>
+      <div class="alert" *ngIf="registerform?.controls['firstname'].errors?.maxlength">
+       First Name must be at least 15 characters long.
+      </div>
+</div>
+<div>
+    Last Name:
+</div>    
+    <input type="text" formControlName="lastname" required minlength="2" required maxlength="15"
+    [(ngModel)]="registerform.lastname">
+    <div *ngIf="registerform?.controls['lastname'].touched ||registerform?.controls['lastname'].dirty">
+        <div class="alert" *ngIf="registerform?.controls['lastname'].errors?.required">
+           Last Name is required
+            </div>
+            <div class="alert" *ngIf="registerform?.controls['lastname'].errors?.minlength">
+               Last Name must be at least 2 characters long.
+              </div>
+              <div class="alert" *ngIf="registerform?.controls['lastname'].errors?.maxlength">
+              Last  Name must be at least 15 characters long.
+              </div>
+        </div>
+    <div>
+       User Name:
+    </div>
+        <input type="text" formControlName="username" required minlength="3" required maxlength="8" [(ngModel)]="registerform.username">
+        
+       
+       
+       
+        <div *ngIf="registerform?.controls['username'].touched ||registerform?.controls['username'].dirty">
+                <div class="alert" *ngIf="registerform?.controls['username'].errors?.required">
+                   User Name is required
+                    </div>
+                    <div class="alert" *ngIf="registerform?.controls['username'].errors?.minlength">
+                            Last Name must be at least 3 characters long.
+                           </div>
+                           <div class="alert" *ngIf="registerform?.controls['username'].errors?.maxlength">
+                           Last  Name must be at least 8 characters long.
+                           </div>
+        </div>
+        <div>
+            Email:
+        </div>
+            <input type="text" formControlName="email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [(ngModel)]="registerform.email">
+            <div *ngIf="registerform?.controls['email'].touched ||registerform?.controls['email'].dirty">
+                <div class="alert" *ngIf="registerform?.controls['email'].errors?.required">
+                   Email is required
+                    </div>
+                    <div class="alert" *ngIf="registerform?.controls['email'].errors?.pattern">
+                            
+                        Email not valid.
+                        </div>
+                        
+                </div>
+            <div>
+                Phone No:
+             
+            </div>              
+              <input type="text" formControlName="phoneno" required maxlength="10" pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" [(ngModel)]="registerform.phoneno">
+              <div *ngIf="registerform?.controls['phoneno'].touched ||registerform?.controls['phoneno'].dirty">
+                    <div class="alert" *ngIf="registerform?.controls['phoneno'].errors?.required">
+                       Phone no is required
+                        </div>
+                        <div class="alert" *ngIf="registerform?.controls['phoneno'].errors?.pattern">
+                            
+                                Phone No not valid.
+                                </div>
+              </div>
+                <div>
+                    Password:
+                </div>
+                    <input type="password" formControlName="password" required minlength="8" required maxlength="20" [(ngModel)]="registerform.password">
+                    <div *ngIf="registerform?.controls['password'].touched ||registerform?.controls['password'].dirty">
+                            <div class="alert" *ngIf="registerform?.controls['password'].errors?.required">
+                               Password is required
+                                </div>
+                                <div class="alert" *ngIf="registerform?.controls['password'].errors?.minlength">
+                                    Password is min 8 characters long.
+                                   </div>
+                                   <div class="alert" *ngIf="registerform?.controls['password'].errors?.maxlength">
+                                   Password is maximum 20 characters long.
+                                   </div>
+                    </div>
+                    <div><input type="checkbox" formControlName="check"  [(ngModel)]="registerform.check">
+                agree to terms & condition</div>
+                <div *ngIf="registerform?.controls['check'].touched ||registerform?.controls['check'].dirty">
+                    <div class="alert" *ngIf="registerform?.controls['check'].errors?.required">
+                       Accept Ts & Cs is required
+                        </div></div>
+                    <button type="submit" class="btn btn-default">submit</button>
+                                                 
+</form>
+</div>
