@@ -1,0 +1,40 @@
+.main-div{
+    height: 100%;
+}
+.header{
+    background-color:skyblue;
+    height:80px;
+}
+.content{
+    height: calc(100vh-160px);
+}
+.hero{
+    background-color: purple;
+    height: 100px;
+}
+.sidebar{
+    background-color: lightgreen;
+    height:150px ;
+}
+.main-containt{
+    background-color: yellow;
+    height:400px ;
+    
+}
+.extra-containt{
+    background-color:brown;
+    height:100px ;
+    
+}
+.img{
+    background-color:darkgreen;
+    height: 100px;
+}
+.post{
+    background-color: pink;
+    height: 100px;
+}
+.footer{
+    background-color:orangered;
+    height: 80px;
+}
