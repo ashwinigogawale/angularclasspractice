@@ -1,0 +1,22 @@
+body{
+margin: 0px;
+}    
+.top{
+    height: 100px;
+    width: 100%;
+    background-color: blueviolet;
+}
+.side{
+    height: 450px;
+    width: 20%;
+    background-color: brown;
+}
+.home{
+    height: 450px;
+    width: 80%;
+    background-color: darkorange;
+}
+.main-con{
+    width: 100%;
+    display: flex;
+}
