@@ -6,10 +6,33 @@
       "designation": "software developer",
       "salary": "20000",
       "mobile": "7030309884",
-      "email": "a@gmail.com",
+      "email": "ash@gmail.com",
       "gender": "female",
       "marathi": "",
       "english": true,
+      "hindi": "",
+      "qualification": "mcs"
+    },
+    {
+      "id": "2",
+      "name": "Ashu",
+      "designation": "software tester",
+      "salary": "8000",
+      "mobile": "7030309884",
+      "email": "ashu@gmail.com",
+      "gender": "female",
+      "qualification": "mcs"
+    },
+    {
+      "id": "3",
+      "name": "aa",
+      "designation": "software developer",
+      "salary": "8000",
+      "mobile": "7030309884",
+      "email": "ash@gmail.com",
+      "gender": "female",
+      "marathi": true,
+      "english": "",
       "hindi": "",
       "qualification": "mcs"
     }

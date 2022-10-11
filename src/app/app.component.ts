@@ -38,6 +38,7 @@ getLatestUser(){
   this.commonService.getAllUser().subscribe((response)=>{
     this. allUser = response
   })
+
 }
 editUser(user:any){
  this.isEdit= true;
