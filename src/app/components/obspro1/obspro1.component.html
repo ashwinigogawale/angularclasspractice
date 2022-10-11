@@ -1,0 +1,10 @@
+<h1>WELCOME TO {{title}}</h1>
+<div>
+  <h2>country name search</h2>
+  <input [formControl] ="term">
+  <hr>
+  <div *ngIf ="results.lenght > 0">
+<li *ngFor="let result of results">{{result.name}}</li>
+  </div>
+</div>
+  link not working

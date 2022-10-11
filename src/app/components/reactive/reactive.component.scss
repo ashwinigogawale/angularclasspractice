@@ -1,0 +1,23 @@
+div{
+  text-align: center;
+}
+button[type="submit"] {
+  font-weight: bold;
+  padding: 4px 8px;
+  border:1px solid #000;
+  background: #3b5998;
+  color:#fff;
+}
+.loginbox{
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  //width: 290px;
+  //height: 470px;
+  padding: 40px 40px;
+  box-sizing: border-box;
+  background: rgba(13, 26, 143, 0.5);
+}
+.alert{
+    color: red;
+}
