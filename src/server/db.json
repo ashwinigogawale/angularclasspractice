@@ -1,0 +1,32 @@
+{
+  "users": [
+    {
+      "name": "mayur",
+      "mobile": "9845679",
+      "email": "ma36@gmail.com",
+      "password": "fhfh",
+      "id": 7
+    },
+    {
+      "name": "Ashwini",
+      "mobile": "7030309884",
+      "email": "ashwinigogawale36@gmail.com",
+      "password": "fhfh",
+      "id": 9
+    },
+    {
+      "name": "",
+      "number": "",
+      "email": "ashwinigogawale36@gmail.com",
+      "password": "",
+      "id": 10
+    },
+    {
+      "name": "Ashwini",
+      "number": "",
+      "email": "ashwinigogawale36@gmail.com",
+      "password": "",
+      "id": 11
+    }
+  ]
+}
