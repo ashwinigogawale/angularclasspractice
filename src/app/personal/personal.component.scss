@@ -1,0 +1,42 @@
+.slider-container{
+  top: 62px;
+  height: 66vh;
+  width: 100%;
+  position: relative;
+
+
+}
+.image-container{
+  height: 100%;
+  width: 100%;
+}
+.image-container img{
+  width: 100%;
+  height: 380px;
+}
+.mk-grid p{
+  text-align: center;
+}
+.image-container .text{
+  position: absolute;
+  z-index: 0;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 30%;
+  text-align: center;
+  width: 30%;
+  font-size: 80px;
+  color: rgb(248, 244, 244);
+}
+//---container------
+.container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media(max-width:768px) {
+  .container {
+    width: 80%;
+   }}

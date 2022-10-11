@@ -1,0 +1,67 @@
+.slider-container{
+  top: 62px;
+  height: 66vh;
+  width: 100%;
+  position: relative;
+
+
+}
+.image-container{
+  height: 100%;
+  width: 100%;
+}
+.image-container img{
+  width: 100%;
+  height: 380px;
+}
+.mk-grid p{
+  text-align: center;
+}
+.image-container .text{
+  position: absolute;
+  z-index: 0;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  top: 30%;
+  text-align: center;
+  width: 30%;
+  font-size: 80px;
+  color: rgb(248, 244, 244);
+}
+//--------------
+@media screen and (min-width: 452px) and (max-width: 800px)
+{
+.h1Header[_ngcontent-c6] {
+    font-size: 22px;
+}}
+
+.h1Header[_ngcontent-c6] {
+    font-size: 23px;
+    text-align: center;
+    padding: 10px 20px;
+    border-bottom: 2px solid #f6f6f6;
+    text-transform: capitalize;
+}
+table thead tr th {
+  background: #FF8C00;
+  padding: 9px 10px;
+  color: #fff;
+  text-align: center;
+}
+.container-holder{
+padding-left: 150px;
+padding-right: 150px;
+background-color:honeydew;
+
+}
+
+@media only screen and (max-width: 750px) {
+  .container-holder {
+    padding-left: 70px;
+    padding-right: 70px;
+  }
+}
+.mat-tab-label{
+  color: #FF8C00;
+}
