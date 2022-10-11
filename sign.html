@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" ng-app="signIt">
+<head>
+    <title>AngularJs Signature Demo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.0-rc.2/angular.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="SignCtrl" ng-init="init()">
+    <div >
+        <div class="container">
+            <div class="navbar-header">
+                <h2>Angular SignIt Demo - Open in fullscreen for better user experience</h2>
+            </div>
+        </div>
+    </div><br>
+    <div class="container" ng-controller="SignCtrl">
+        
+        <div class="row>">
+            <div class="panel panel-default">
+                <div class="panel-heading">Test to sign the petition</div>
+                <div class="panel-body">
+                    <form name="signForm" novalidate>
+                        <div class="col-md-4">
+                            <div class="form-group" validate-form>
+                                <label>First Name</label>
+                                <input type="text" name="fname" class="form-control" data-ng-model="newSignature.FirstName" required />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" validate-form>
+                                <label>Last Name</label>
+                                <input type="text" name="lname" class="form-control" data-ng-model="newSignature.LastName" required />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" validate-form>
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" data-ng-model="newSignature.Email" required />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Draw your signature</label>
+                                    <canvas class style="border:1px solid #000000; border-radius:5px;" width="350" height="50" id="canvas" drawing ></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-default" data-ng-click="clear()">Clear</button>
+                                <button class="btn btn-primary" data-ng-click="addSign(newSignature)" ng-disabled="!signForm.$valid">Sign It!</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row>">
+            <div class="col-md-12">
+                <div class="row">
+                    <h2>Signatories</h2>
+                </div>
+                <br />
+                <div class="row">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>E-mail</th>
+                                <th>Signature</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="signature in signatures">
+                                <th>{{$index+1}}</th>
+                                <td>{{signature.FirstName}}</td>
+                                <td>{{signature.LastName}}</td>
+                                <td>{{signature.Email}}</td>
+                                <td>
+                                    <canvas class style="border:1px solid #000000; border-radius:5px;" width="350" height="50" id="canvas2" redraw data-index="{{$index}}"></canvas>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
