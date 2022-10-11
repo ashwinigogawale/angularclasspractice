@@ -1,0 +1,89 @@
+<div class="page-wrapper" style="min-height: 567px;">
+  
+  <div class="container-fluid">
+
+      
+
+<div class="row page-titles">
+<div class="col-md-5 align-self-center">
+<h3 class="text-themecolor">Depertment List</h3>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/">Home</a></li>
+  <li class="breadcrumb-item active">Depertment List </li>
+</ol>
+</div>
+<div class="">
+<button class="right-side-toggle waves-effect waves-light btn-inverse btn btn-circle btn-sm pull-right m-l-10"><i class="ti-settings text-white"></i></button>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-6">
+<div class="card">
+  <div class="card-body">
+      <div class="">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th>No</th>
+                      <th>Name</th>
+                      <th class="text-nowrap">Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+
+                      <tr>
+                          <td>1</td>
+                          <td>
+                              <p>Ios</p>
+                          </td>
+
+                          <td class="text-nowrap">
+                              <a data-toggle="tooltip" data-val-id="79408a83-c54f-4836-8e21-caf381565dbf"   data-original-title="Edit" class="btnEdit"> <i class="fa fa-edit"></i> </a>
+                              <a data-toggle="tooltip" data-original-title="Delete" onclick="return confirm('are you sure want to delete?')" href="/common/DeleteDeparment/79408a83-c54f-4836-8e21-caf381565dbf"> <i class="fa fa-trash"></i> </a>
+                          </td>
+                      </tr>
+                      <tr *ngFor="let user of allUser">
+                      <td>{{user.name}}</td>
+                      <td class="text-nowrap">
+                              <a data-toggle="tooltip" data-val-id="79408a83-c54f-4836-8e21-caf381565dbf"   data-original-title="Edit" class="btnEdit"> <i class="fa fa-edit"></i> </a>
+                              <a data-toggle="tooltip" data-original-title="Delete" onclick="return confirm('are you sure want to delete?')" href="/common/DeleteDeparment/79408a83-c54f-4836-8e21-caf381565dbf"> <i class="fa fa-trash"></i> </a>
+                          </td>
+</tr>
+                      
+                      
+                      
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+</div>
+<div class="col-md-6">
+<div class="card">
+  <div class="card-body">
+      <form name="form1" method="post" action="/
+​/api​/CommonAPI​/UpdateDepartment">
+          <div class="form-group">
+
+              <label for="Name">Department</label>
+              <input type="hidden" name="Id" id="Id">
+              <input type="text" name="Name" class="form-control" id="Name" placeholder="Enter Department Name">
+              <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+
+          </div>
+          <button type="submit" id="btnSave" class="btn btn-sm btn-success waves-effect waves-light " onclick="addUser()"><i class="fa fa-plus"></i> Add</button>
+          <button type="button" id="btnCancel" class="btn btn-sm btn-danger waves-effect waves-light "><i class="fa fa-remove"></i> Cancel</button>
+        
+      <input name="__RequestVerificationToken" type="hidden" value="CfDJ8Kz1OvYSBB1Mv-0gbTOU0XEHRGTqbB-8F1Hv5kEAENNVv8bG7euujlrQvITs_F9Vax-daKOejPbFbWfmmVxcPkrgujrLmFDoY4jjhHnHQM_SDQRNtya3kCZw6EhZSQp4RZ9QXzLb5WbrbKqgjokedJa-B6YIpx9DIomhjE0RSSIFje_hc0CqX_KVmY9E3GbihQ"></form>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+
+  </div>
+ 
+</div>
